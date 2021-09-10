@@ -13,6 +13,11 @@ export type PostListPropsType = {
 }
 
 const PostList: React.FC<PostListPropsType> = ({posts, title, removePost}) => {
+    if(!posts.length){
+       return  <h1 style={{textAlign: 'center'}}>
+            Посты не найдены
+        </h1> 
+    }
     return (
         <div>
             <h1 style={{textAlign: 'center'}}>{title}</h1>
