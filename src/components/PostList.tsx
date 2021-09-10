@@ -8,14 +8,16 @@ export type PostType = {
 }
 export type PostListPropsType = {
     posts: Array<PostType>,
-    title: string
+    title: string,
+    removePost: (post: PostType) => void
 }
 
-const PostList:React.FC<PostListPropsType> = ({posts, title}) => {
+const PostList: React.FC<PostListPropsType> = ({posts, title, removePost}) => {
     return (
         <div>
-        <h1 style={{textAlign: 'center'}}>{title}</h1>
-    {posts.map(post => <PostItem key={post.id} post={post}/>)}
+            <h1 style={{textAlign: 'center'}}>{title}</h1>
+            {posts.map((post, index) => <PostItem number={index + 1}
+                                                  key={post.id} post={post} removePost={removePost}/>)}
         </div>
     )
 };
