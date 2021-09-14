@@ -3,6 +3,8 @@ import './App.css';
 import PostList, {PostType} from "./components/PostList";
 import PostForm from "./components/PostForm";
 import PostFilter from "./components/PostFilter";
+import MyModal from "./components/UI/myModal/MyModal";
+import MyButton from "./components/UI/button/MyButton";
 
 
 function App() {
@@ -13,23 +15,24 @@ function App() {
     ])
 
     const [filter, setFilter] = useState({sort: '', query: ''})
+    const [modal, setModal] = useState(false)
 
-    const sortedPost = useMemo(()=>{
+    const sortedPost = useMemo(() => {
         console.log('прошла перерисовка')
-        if(filter.sort){
+        if (filter.sort) {
             // @ts-ignore
-            return [...posts].sort((a,b) => a[filter.sort].localeCompare(b[filter.sort]))
+            return [...posts].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]))
         }
         return posts
-    },[filter.sort, posts])
+    }, [filter.sort, posts])
 
     const sortedAndSearchedPosts = useMemo(() => {
-            return sortedPost.filter(post => post.title.toLowerCase().includes(filter.query.toLowerCase()))
-    },[filter.query,sortedPost])
+        return sortedPost.filter(post => post.title.toLowerCase().includes(filter.query.toLowerCase()))
+    }, [filter.query, sortedPost])
 
     const createPost = (newPost: PostType) => {
-        // @ts-ignore
         setPosts([...posts, newPost])
+        setModal(false)
     }
 
     const removePost = (post: PostType) => {
@@ -38,11 +41,15 @@ function App() {
 
     return (
         <div className="App">
-            <PostForm  create={createPost} />
+            <MyButton style={{marginTop: '30px'}} onClick={() => setModal(true)}>
+                Создать пользователя
+            </MyButton>
+            <MyModal visible={modal} setVisible={setModal}>
+                <PostForm create={createPost}/>
+            </MyModal>
             <hr style={{margin: '15px'}}/>
             <PostFilter filter={filter} setFilter={setFilter}/>
-                 <PostList removePost={removePost} posts={sortedAndSearchedPosts} title='Посты про JS'/>
-
+            <PostList removePost={removePost} posts={sortedAndSearchedPosts} title='Посты про JS'/>
 
 
         </div>

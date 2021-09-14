@@ -4,6 +4,7 @@ import style from './MyButton.module.css'
 type MyButtonPropsType = {
     disabled?: boolean
     onClick?: (e: any) => void
+    style?: any
 }
 
 const MyButton: React.FC<MyButtonPropsType> = ({children, ...props}) => {
