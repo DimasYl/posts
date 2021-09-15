@@ -1,20 +1,20 @@
 import {useMemo} from "react";
+import {PostType} from "../components/PostList";
 
-export const useSortedPosts = (posts: any, sort: any) => {
-    const sortedPost = useMemo(() => {
+export const useSortedPosts = (posts: Array<PostType>, sort: any) => {
+    return useMemo(() => {
         console.log('прошла перерисовка')
         if (sort) {
+            // @ts-ignore
             return [...posts].sort((a, b) => a[sort].localeCompare(b[sort]))
         }
         return posts
     }, [sort, posts])
-    return sortedPost
 }
 
-export const usePosts = (posts: any, sort: any, query: any) => {
+export const usePosts = (posts: Array<PostType>, sort: any, query: any) => {
     const sortedPosts = useSortedPosts(posts, sort)
-    const sortedAndSearchedPosts = useMemo(() => {
-        return sortedPosts.filter((post: any) => post.title.toLowerCase().includes(query.toLowerCase()))
+    return useMemo(() => {
+        return sortedPosts.filter((post: PostType) => post.title.toLowerCase().includes(query.toLowerCase()))
     }, [query, sortedPosts])
-    return sortedAndSearchedPosts
 }
