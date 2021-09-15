@@ -1,39 +1,43 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import PostList, {PostType} from "./components/PostList";
 import PostForm from "./components/PostForm";
 import PostFilter from "./components/PostFilter";
 import MyModal from "./components/UI/myModal/MyModal";
 import MyButton from "./components/UI/button/MyButton";
+import {usePosts} from "./hooks/usePosts";
+import PostServise from "./api/Postservise";
+import Loader from "./components/UI/loader/Loader";
 
 
 function App() {
-    const [posts, setPosts] = useState<Array<PostType>>([
-        {id: 1, title: 'a-Javascript', body: 'z-description'},
-        {id: 2, title: 'b-Javascript 2', body: 'x-description'},
-        {id: 3, title: 'c-Javascript 3', body: 'y-description'},
-    ])
+    const [posts, setPosts] = useState<Array<PostType>>([])
 
     const [filter, setFilter] = useState({sort: '', query: ''})
     const [modal, setModal] = useState(false)
+    const [isPostsLoading, setIsPostsLoading] = useState(false)
 
-    const sortedPost = useMemo(() => {
-        console.log('прошла перерисовка')
-        if (filter.sort) {
-            // @ts-ignore
-            return [...posts].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]))
-        }
-        return posts
-    }, [filter.sort, posts])
+    const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query)
 
-    const sortedAndSearchedPosts = useMemo(() => {
-        return sortedPost.filter(post => post.title.toLowerCase().includes(filter.query.toLowerCase()))
-    }, [filter.query, sortedPost])
+    useEffect(() => {
+        fetchPosts().then(r => r)
+    }, [])
 
     const createPost = (newPost: PostType) => {
         setPosts([...posts, newPost])
         setModal(false)
     }
+
+    async function fetchPosts() {
+        setIsPostsLoading(true)
+        setTimeout(async ()=>{
+            const posts = await PostServise.getAll()
+            setPosts(posts)
+            setIsPostsLoading(false)
+        },3000)
+
+    }
+
 
     const removePost = (post: PostType) => {
         setPosts(posts.filter(p => p.id !== post.id))
@@ -49,8 +53,10 @@ function App() {
             </MyModal>
             <hr style={{margin: '15px'}}/>
             <PostFilter filter={filter} setFilter={setFilter}/>
-            <PostList removePost={removePost} posts={sortedAndSearchedPosts} title='Посты про JS'/>
-
+            {isPostsLoading
+                ? <div className={'block'}><Loader/></div>
+                : <PostList removePost={removePost} posts={sortedAndSearchedPosts} title='Посты про JS'/>
+            }
 
         </div>
     );
