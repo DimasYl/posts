@@ -23,14 +23,13 @@ const PostList: React.FC<PostListPropsType> = ({posts, title, removePost}) => {
         <div>
             <h1 style={{textAlign: 'center'}}>{title}</h1>
             <TransitionGroup>
-                {posts.map((post, index) =>
+                {posts.map((post) =>
                     <CSSTransition
                         key={post.id}
                         timeout={500}
                         classNames="post"
                     >
-                        <PostItem number={index + 1}
-                                  post={post} removePost={removePost}/>
+                        <PostItem post={post} removePost={removePost}/>
                     </CSSTransition>
                 )}
             </TransitionGroup>

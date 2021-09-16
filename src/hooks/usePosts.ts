@@ -1,7 +1,7 @@
 import {useMemo} from "react";
 import {PostType} from "../components/PostList";
 
-export const useSortedPosts = (posts: Array<PostType>, sort: any) => {
+export const useSortedPosts = (posts: Array<PostType>, sort: string) => {
     return useMemo(() => {
         console.log('прошла перерисовка')
         if (sort) {
@@ -12,7 +12,7 @@ export const useSortedPosts = (posts: Array<PostType>, sort: any) => {
     }, [sort, posts])
 }
 
-export const usePosts = (posts: Array<PostType>, sort: any, query: any) => {
+export const usePosts = (posts: Array<PostType>, sort: string, query: string) => {
     const sortedPosts = useSortedPosts(posts, sort)
     return useMemo(() => {
         return sortedPosts.filter((post: PostType) => post.title.toLowerCase().includes(query.toLowerCase()))
