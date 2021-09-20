@@ -1,6 +1,7 @@
 import React from 'react';
 import {PostType} from "./PostList";
 import MyButton from './UI/button/MyButton';
+import {useHistory} from "react-router-dom";
 
 
 export type PostItemPropsType = {
@@ -9,6 +10,7 @@ export type PostItemPropsType = {
 }
 
 const PostItem: React.FC<PostItemPropsType> = ({post, removePost}) => {
+    const router = useHistory()
     return (
         <div className="post">
             <div className="post__content">
@@ -18,6 +20,7 @@ const PostItem: React.FC<PostItemPropsType> = ({post, removePost}) => {
                 </div>
             </div>
             <div className="post__btn">
+                <MyButton onClick={() => router.push(`/posts/${post.id}`)}>Открыть</MyButton>
                 <MyButton onClick={() => {removePost(post)}}>Удалить</MyButton>
             </div>
         </div>
