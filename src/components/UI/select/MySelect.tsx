@@ -1,12 +1,12 @@
 import React from 'react';
 
 type OptionType = {
-    value: string,
+    value: string | number,
     name: string
 }
 
 type MySelectPropsType = {
-    value: string
+    value: string | number
     defaultValue: string,
     options: Array<OptionType>
     onChange: (sort: any) => void
